@@ -1,0 +1,54 @@
+urlyconnect 0.1
+---------------
+
+urlyconnect will initiate 8 simultaneous SSH connections to a chosen
+host, test them for stability over a period of approximately 30
+seconds, select one which is still working at the end of this period
+and run an additional SSH client on the existing stable TCP
+connection.
+
+This is done for a very specific use-case: dealing with strange
+connection drop-outs when attempting to create an SSH tunnel on the
+student network at the University of Tasmania. It may or may not be
+useful for any other network conditions ever.
+
+This software is copyright 2010 Thomas Karpiniec and made available
+under the terms of the GNU General Public License version 3. See the
+file COPYING for details.
+
+
+Compilation/Installation
+------------------------
+
+Simply type `make' to compile. Move the binary `urlyconnect' to a
+convenient location such as /usr/local/bin.
+
+
+Usage
+-----
+
+* Set up passwordless authentication by placing a local ssh key in the
+  ~/.ssh/authorized_keys file on the server.
+
+* Ensure that the user with which you are logging in will have a shell
+  with the "echo" command (such as bash).
+
+* Execute urlyconnect with the options:
+
+  urlyconnect [user@]hostname [ssh-port [tunnel-port]]
+
+  ssh-port: SSH port to use (default 22)
+  tunnel-port: If specified, uses ssh -D with this as the proxy port
+
+
+Known Issues
+------------
+
+* Ubuntu Karmic Koala: This has a slightly old version of OpenSSH
+  (5.1p1) which has a bug with the -D option, such that a subsequent
+  client connecting using a ControlMaster socket with the -D option
+  will not create the local listening port as expected.
+
+  Using version 5.5 or later of the OpenSSH client resolves this
+  problem.
+
